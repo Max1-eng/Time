@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body style="background-color:red">
+    <?php
+//секретный ключ
+$secret = "6LfadfwUAAAAANnLnj2XfKlVsxGk1zZJCm8L2R4p";
+//ответ
+$response = null;
+//проверка секретного ключа
+$reCaptcha = new ReCaptcha($secret);
+ 
+if (!empty($_POST)) {
+ 
+    //Валидация $_POST['name'] и $_POST['email']
+    if ($_POST["g-recaptcha-response"]) {
+        $response = $reCaptcha->verifyResponse(
+            $_SERVER["REMOTE_ADDR"],
+            $_POST["g-recaptcha-response"]
+        );
+    }
+ 
+    if ($response != null && $response->success) {
+        echo "Все хорошо.";
+    } else {
+        echo "Вы точно человек?";
+    }
+ 
+}
+?>
+ 
+<form method="post">
+    <label for="name">Имя:</label>
+    <input name="name" required><br />
+    <label for="email">E-mail:</label>
+    <input name="email" type="email" required><br />
+    <div class="g-recaptcha" data-sitekey="6LfadfwUAAAAAG4PH8hfdfeOManqkr2syMH3R_iH"></div>
+    <input type="submit" value="Отправить" />
+</form>
+ 
+<script src='https://www.google.com/recaptcha/api.js'></script>
+ 
+   <span id="doc_time">
+ Дата и время
+</span>
+
+<script type="text/javascript">
+     clock();
+function clock() {
+var d = new Date();
+var month_num = d.getMonth()
+var day = d.getDate();
+var hours = d.getHours();
+var minutes = d.getMinutes();
+var seconds = d.getSeconds();
+
+month=new Array("th JANUARY", "th FEBRUARY", "th MARCH", "th APRIL", "th MAY", "th JUNE",
+"th JULY", "th AUGUST", "th SEPTEMBER", "th OKTOBER", "th NOVEMBER", "th DESEMREB");
+
+if (day <= 9) day = "0" + day;
+if (hours <= 9) hours = "0" + hours;
+if (minutes <= 9) minutes = "0" + minutes;
+if (seconds <= 9) seconds = "0" + seconds;
+
+date_time = "Today is-" + day + " " + month[month_num] + " " + d.getFullYear() +
+" г.&nbsp;&nbsp;&nbsp;Hours-"+ hours + ":" + minutes + ":" + seconds;
+if (document.layers) {
+ document.layers.doc_time.document.write(date_time);
+ document.layers.doc_time.document.close();
+}
+else document.getElementById("doc_time").innerHTML = date_time;
+ setTimeout("clock()", 1000);
+}
+</script>
+</body>
+</html>
